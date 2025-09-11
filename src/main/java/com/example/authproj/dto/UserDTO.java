@@ -1,4 +1,4 @@
-package com.example.authproj;
+package com.example.authproj.dto;
 
 import javax.validation.constraints.NotNull;
 
