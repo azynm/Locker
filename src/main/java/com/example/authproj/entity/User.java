@@ -36,6 +36,10 @@ public class User {
     public Set<Role> getRoles() {
         return roles;
     }
+
+    public void addRole(Role role) {
+        this.roles.add(role);
+    }
     public void setUsername(String username) {
         this.username = username;
     }
@@ -45,5 +49,6 @@ public class User {
     public void setEmail(String email) {
         this.email = email;
     }
+
 
 }
