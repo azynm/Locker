@@ -67,6 +67,7 @@
 		<groupId>org.hibernate.validator</groupId>
 		<artifactId>hibernate-validator</artifactId>
 	</dependency>
+
 		
 	</dependencies>
 
@@ -75,6 +76,15 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>org.flywaydb</groupId>
+				<artifactId>flyway-maven-plugin</artifactId>
+				<configuration>
+					<url>jdbc:postgresql://localhost:5432/your_database</url>
+					<user>your_username</user>
+					<password>your_password</password>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>
