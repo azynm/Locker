@@ -40,11 +40,6 @@ public class AuthService {
             user.addRole(defaultRole);
             userRepository.save(user);
 
-           /*
-            - todo
-                - use rolerepo instead of hardcode
-                - will probably need to enter db to do so
-            */
 
 
 
