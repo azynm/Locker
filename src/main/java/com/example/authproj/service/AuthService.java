@@ -1,6 +1,5 @@
 package com.example.authproj.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.authproj.config.PassEncoder;
@@ -8,7 +7,7 @@ import com.example.authproj.dto.RegisterDTO;
 import com.example.authproj.entity.Role;
 import com.example.authproj.entity.User;
 import com.example.authproj.repositories.RoleRepository;
-import com.example.authproj.repositories.UserRepository; // Import the User class
+import com.example.authproj.repositories.UserRepository;
 
 
 @Service
@@ -17,7 +16,7 @@ public class AuthService {
     private final RoleRepository roleRepository;
     private final PassEncoder passEncoder;
 
-    @Autowired
+
     public AuthService(UserRepository userRepository, RoleRepository roleRepository, PassEncoder passEncoder) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
@@ -25,23 +24,18 @@ public class AuthService {
     }
 
 
-    public int checkUserExists(String email) {
-        if (userRepository.findByEmail(email) != null) {
-            return 1; // User exists
-        } else {
-            return 0; // User does not exist
-        }
+    public boolean checkUserExists(String email) {
+        return userRepository.findByEmail(email) != null;
     }
     public void registerUser(RegisterDTO registerDTO) {
-        if (checkUserExists(registerDTO.getEmail()) == 0) {
+        if (!checkUserExists(registerDTO.getEmail())) {
             String encryptedPassword = passEncoder.encode().encode(registerDTO.getPassword());
-            registerDTO.setPassword(encryptedPassword);
-            Role defaultRole = new Role(1, "USER");
-            registerDTO.addRole(defaultRole);
+            Role defaultRole = roleRepository.findByName("USER");
+
 
             User user = new User();
             user.setUsername(registerDTO.getUsername());
-            user.setPassword(registerDTO.getPassword());
+            user.setPassword(encryptedPassword);
             user.setEmail(registerDTO.getEmail());
             user.addRole(defaultRole);
             userRepository.save(user);
