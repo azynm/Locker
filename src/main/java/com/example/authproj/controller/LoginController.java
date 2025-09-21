@@ -6,24 +6,21 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.authproj.dto.RegisterDTO;
+import com.example.authproj.dto.LoginDTO;
 import com.example.authproj.repositories.UserRepository;
-import com.example.authproj.service.AuthService;
 
 @RestController
 @RequestMapping("api/auth")
 public class LoginController {
-    private final AuthService authService;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public LoginController(AuthService authService, UserRepository userRepository, PasswordEncoder passwordEncoder) {
-        this.authService = authService;
+    public LoginController(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
     }
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody RegisterDTO dto) {
+    public ResponseEntity<String> login(@RequestBody LoginDTO dto) {
         if (userRepository.findByEmail(dto.getEmail()) != null) {
             String storedHash = userRepository.findByEmail(dto.getEmail()).getPassword();
             if (passwordEncoder.matches(dto.getPassword(), storedHash)) {
