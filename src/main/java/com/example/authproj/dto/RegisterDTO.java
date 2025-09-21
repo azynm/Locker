@@ -7,12 +7,18 @@ import javax.validation.constraints.NotNull;
 
 import com.example.authproj.entity.Role;
 
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+
 public class RegisterDTO {
     @NotNull
     String username;
     @NotNull
+    @NotBlank
     String password;
     @NotNull
+    @NotBlank
+    @Email
     String email;
     @NotNull
     Set<Role> roles = new HashSet<>();
