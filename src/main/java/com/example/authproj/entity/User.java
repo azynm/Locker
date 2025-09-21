@@ -1,5 +1,6 @@
 package com.example.authproj.entity;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import jakarta.persistence.Column;
@@ -35,7 +36,7 @@ public class User {
         joinColumns = @JoinColumn(name = "user_id"),
         inverseJoinColumns = @JoinColumn(name = "role_id")
     )
-    private Set<Role> roles;
+    private Set<Role> roles = new HashSet<>();
 
     public User() {
     }
@@ -43,7 +44,7 @@ public class User {
         this.id = id;
         this.username = username;
         this.password = password;
-        this.roles = roles;
+        this.roles = roles != null ? roles : new HashSet<>();
     }
 
     public int getId() {

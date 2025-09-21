@@ -1,5 +1,6 @@
 package com.example.authproj.dto;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.validation.constraints.NotNull;
@@ -14,7 +15,10 @@ public class RegisterDTO {
     @NotNull
     String email;
     @NotNull
-    Set<Role> roles;
+    Set<Role> roles = new HashSet<>();
+
+    public RegisterDTO() {
+    }
 
     public String getUsername() {
         return username;
@@ -45,6 +49,6 @@ public class RegisterDTO {
     }
 
     public void addRole(Role role) {
-        this.roles.add(role);
+        roles.add(role);
     }
 }
