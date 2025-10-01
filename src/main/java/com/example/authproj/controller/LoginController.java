@@ -7,26 +7,32 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.authproj.dto.LoginDTO;
+import com.example.authproj.dto.TokenResponse;
 import com.example.authproj.repositories.UserRepository;
+import com.example.authproj.security.JWTService;
 
 @RestController
 @RequestMapping("api/auth")
 public class LoginController {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final JWTService jwtService;
 
-    public LoginController(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    public LoginController(UserRepository userRepository, PasswordEncoder passwordEncoder, JWTService jwtService) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
+        this.jwtService = jwtService;
     }
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody LoginDTO dto) {
-        if (userRepository.findByEmail(dto.getEmail()) != null) {
-            String storedHash = userRepository.findByEmail(dto.getEmail()).getPassword();
-            if (passwordEncoder.matches(dto.getPassword(), storedHash)) {
-                return ResponseEntity.ok("Login successful");
-            }
+    public ResponseEntity<TokenResponse> login(@RequestBody LoginDTO dto) {
+        var user = userRepository.findByEmail(dto.getEmail());
+
+        if (user != null && passwordEncoder.matches(dto.getPassword(), user.getPassword())) {
+            String token = jwtService.generateToken(user.getEmail());
+            TokenResponse tokenResponse = new TokenResponse(token);
+            return ResponseEntity.ok(tokenResponse);
         }
-        return ResponseEntity.status(401).body("Invalid credentials");
+
+        return ResponseEntity.status(401).body(new TokenResponse("Invalid credentials"));
     }
 }
